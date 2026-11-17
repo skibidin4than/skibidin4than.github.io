@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Container Ship Mystery: Tracing the EVER GOLDEN — Nathan</title>
+  <meta name="description" content="Finding the port where a container-ship photo was taken, using only a written description, by filtering candidates and cross-validating each clue.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The Container Ship Mystery: Tracing the EVER GOLDEN — Nathan">
+  <meta property="og:description" content="Finding the port where a container-ship photo was taken, using only a written description, by filtering candidates and cross-validating each clue.">
+  <meta property="og:image" content="/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/poppins-regular.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/fonts/poppins-bold.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="/assets/css/style.css?v=18">
+  <script src="/assets/js/main.js?v=10" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Nathan",
+    "alternateName": "skibidin4than",
+    "url": "/",
+    "sameAs": [
+      "https://github.com/skibidin4than",
+      "https://www.credly.com/users/skibidin4than/badges"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The Container Ship Mystery: Tracing the EVER GOLDEN",
+    "description": "Finding the port where a container-ship photo was taken, using only a written description, by filtering candidates and cross-validating each clue.",
+    "datePublished": "2026-11-06",
+    "author": {
+      "@type": "Person",
+      "name": "Nathan",
+      "alternateName": "skibidin4than"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="nav-brand" href="/">nathan<span>.</span></a>
+      <div class="nav-links">
+        <a class="nav-link active" href="/writeups/">writeups</a>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
+    <article class="article">
+      <header class="article-header">
+        <div class="article-meta">
+          <time datetime="2026-11-06">2026-11-06</time>
+          <span class="lvl lvl-hard">Hard</span>
+          <span class="cat">GEO-INT</span>
+        </div>
+        <h1 class="article-title">The Container Ship Mystery: Tracing the EVER GOLDEN</h1>
+        <p class="article-description">Finding the port where a container-ship photo was taken, using only a written description, by filtering candidates and cross-validating each clue.</p>
+        <div class="article-tags">
+          <span class="tag-chip">GEO-INT</span>
+          <span class="tag-chip">IMINT</span>
+          <span class="tag-chip">Maritime OSINT</span>
+          <span class="tag-chip">Vessel Tracking</span>
+        </div>
+      </header>
+      <div class="article-body">
+        <p>In this OSINT challenge we get a written description of a photo of a very large container ship, without the image itself. The task is simple but tricky: find the port where the photo was taken. The description contains many overlapping visual details. Taken one at a time, each works as a filter, and together they point to a single place.</p>
+
+        <h2><span class="step-number">01</span> Break down the maritime data</h2>
+        <p>In maritime OSINT we first understand the main subject: the ship. The vessel is EVER GOLDEN (IMO 9811000), and it sails on the AEM7 service (Asia-Mediterranean).</p>
+        <p>We start here because a liner service follows a fixed rotation of ports. A ship can only be photographed in a port it actually calls at, so the rotation gives us a candidate list instead of the whole world. The ship's size (the source gives 20,000+ TEU) narrows it further, since only terminals that can handle this class qualify.</p>
+
+        <h2><span class="step-number">02</span> Filter by geography and topography</h2>
+        <p>This is where IMINT observation starts. The description states:</p>
+        <blockquote>On the right side of the frame, a historic fortress/castle with crenellated walls sits on a rocky promontory overlooking the harbor entrance.</blockquote>
+        <p>This is our strongest filter. Many ports have an old fortification somewhere, so the fortress alone is not enough. What is rare is a modern, high-capacity container port whose harbor entrance is overlooked by a rocky promontory with a fortress on top.</p>
+        <p>So we go through the candidates one by one in Google Earth and compare the terrain around each harbor entrance (flat or elevated, which side the high ground is on, whether a fortification is there) with what the description says. We rule candidates out by looking at the imagery, not by assumption.</p>
+
+        <h2><span class="step-number">03</span> Cross-validate with infrastructure and colour</h2>
+        <p>A good OSINT analyst never relies on a single clue, so we cross-validate with smaller details. The description includes three colour-coded ones:</p>
+        <p>Port cranes: Super Post-Panamax cranes painted entirely bright blue, instead of the red or white seen in most ports.</p>
+        <p>Navigation tower: a pilot tower at the end of the left breakwater, painted with horizontal red and white stripes.</p>
+        <p>Pilot boats: the pilot authority's boats have bright yellow hulls.</p>
+        <p>Any one of these could match many ports. The combination of all three is far more selective, which is why we use them to confirm or reject a candidate that already passed step 02.</p>
+
+        <h2><span class="step-number">04</span> Temporal analysis: light and season</h2>
+        <p>The description gives a time of 07:45 local time and snow-covered mountains in the background. Snow on mountains points to the colder months, and low early-morning light is consistent with that. Clear winter mornings also allow long visibility.</p>
+        <p>We use this as a consistency check on a candidate, not as a filter on its own. It cannot separate two Mediterranean ports, but it can tell us whether a candidate's surroundings are plausible for the season implied by the description.</p>
+
+        <h2><span class="step-number">05</span> Limits of the evidence</h2>
+        <p>We never saw the photo. Everything below comes from the challenge text and was not independently verified: the vessel name and IMO number, the AEM7 service and its port rotation, the ship's 20,000+ TEU size, the fortress description, the crane, tower and pilot-boat colours, the 07:45 local time and the snow-covered mountains. Our reasoning is only as reliable as that description.</p>
+
+        <div class="takeaway">
+          <p class="takeaway-label">KEY TAKEAWAY</p>
+          <p>Treat every detail as a filter on a candidate list, then cross-validate with independent clues. No single detail should decide the answer.</p>
+        </div>
+      </div>
+      <footer class="article-footer"><a class="article-back back" href="/writeups/">Back to writeups</a></footer>
+    </article>
+  </main>
+  <footer class="site-footer container">
+    <p class="footer-copy">© 2026 Nathan</p>
+    <p class="footer-note">Document the process.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deepfake Detection Challenge: Dissecting a Synthetic Video — Nathan</title>
+  <meta name="description" content="How a forensic report on a suspected deepfake of a political figure is read across visual, temporal, audio and frequency evidence.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Deepfake Detection Challenge: Dissecting a Synthetic Video — Nathan">
+  <meta property="og:description" content="How a forensic report on a suspected deepfake of a political figure is read across visual, temporal, audio and frequency evidence.">
+  <meta property="og:image" content="/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/poppins-regular.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/fonts/poppins-bold.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="/assets/css/style.css?v=18">
+  <script src="/assets/js/main.js?v=10" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Nathan",
+    "alternateName": "skibidin4than",
+    "url": "/",
+    "sameAs": [
+      "https://github.com/skibidin4than",
+      "https://www.credly.com/users/skibidin4than/badges"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Deepfake Detection Challenge: Dissecting a Synthetic Video",
+    "description": "How a forensic report on a suspected deepfake of a political figure is read across visual, temporal, audio and frequency evidence.",
+    "datePublished": "2026-11-06",
+    "author": {
+      "@type": "Person",
+      "name": "Nathan",
+      "alternateName": "skibidin4than"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="nav-brand" href="/">nathan<span>.</span></a>
+      <div class="nav-links">
+        <a class="nav-link active" href="/writeups/">writeups</a>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
+    <article class="article">
+      <header class="article-header">
+        <div class="article-meta">
+          <time datetime="2026-11-06">2026-11-06</time>
+          <span class="lvl lvl-hard">Hard</span>
+          <span class="cat">Multimedia Forensics</span>
+        </div>
+        <h1 class="article-title">Deepfake Detection Challenge: Dissecting a Synthetic Video</h1>
+        <p class="article-description">How a forensic report on a suspected deepfake of a political figure is read across visual, temporal, audio and frequency evidence.</p>
+        <div class="article-tags">
+          <span class="tag-chip">Deepfake Analysis</span>
+          <span class="tag-chip">Spectral Analysis</span>
+          <span class="tag-chip">Audio Forensics</span>
+          <span class="tag-chip">Multimedia Forensics</span>
+        </div>
+      </header>
+      <div class="article-body">
+        <p>We are given a video of a political figure that is strongly suspected to be manipulated. The goal is to decide whether it is a deepfake and to work out what kind of engine produced it. Eyeballing the video is not enough, so we work through the forensic report at pixel, temporal and frequency level. All figures below come from the report supplied with the challenge.</p>
+
+        <h2><span class="step-number">01</span> Visual forensics</h2>
+        <p>We start with the parts of a face that are hardest for a generative model to keep consistent. If one of them breaks, it is a cheap first indicator.</p>
+        <p>Eyes and reflections: light follows 3D physics, and models often fail to reproduce that. The report records different eye reflections between the left and right eye in 23% of frames. The blink rate is 8.2 per minute, while the report gives 15-20 per minute as normal for a human. A low blink rate is a commonly cited deepfake indicator.</p>
+        <p>Teeth: models tend to render teeth as a repeating white texture, which produces fused or doubled teeth. The report flags this at 0:32, 1:15 and 2:03.</p>
+        <p>Blending: artifacts along the jawline appear in 12% of frames. We look at the jawline because a face swap leaves a seam where the synthetic face meets the real one, so this is consistent with a face-swap technique.</p>
+
+        <h2><span class="step-number">02</span> Temporal and audio analysis</h2>
+        <p>Deepfakes can be generated frame by frame, so we check whether the video stays coherent over time, and whether sound and picture belong together.</p>
+        <p>Temporal discontinuities: the target's head makes a small jump about every 30 frames (roughly one second). A real recording has no such rhythm.</p>
+        <p>Facial Action Units (FAUs): the inner and outer brow always move together and never independently. In a real face they can move separately, so this stiffness is a warning sign.</p>
+        <p>Audio: the fundamental frequency (F0) is similar to the target's, but the spectrum is cut at 8 kHz and only noise remains above it. The audio also leads the lip movement by 80 ms, and the lip-sync score is low. Together this suggests the voice was synthesized separately from the video, for example with voice cloning or text-to-speech.</p>
+
+        <h2><span class="step-number">03</span> Frequency-domain analysis</h2>
+        <p>This is the part of the report that matters most for the question of which engine was used. Generative models that upscale images can leave regular, periodic patterns in the frequency spectrum. These patterns are invisible to the eye but show up as peaks, and their position says something about how the image was built.</p>
+        <p>The report finds periodic artifacts and a spectral peak in this video. We deliberately do not publish the values or what they match, because that comparison is the question the challenge asks you to answer. Compare the spacing and position of the peaks against what is documented in the deepfake-forensics literature.</p>
+
+        <div class="takeaway">
+          <p class="takeaway-label">KEY TAKEAWAY</p>
+          <p>No single artifact proves a deepfake. Confidence comes from independent layers (visual, temporal, audio and spectral) pointing the same way, and the frequency domain is where the generation method leaves its most specific trace.</p>
+        </div>
+      </div>
+      <footer class="article-footer"><a class="article-back back" href="/writeups/">Back to writeups</a></footer>
+    </article>
+  </main>
+  <footer class="site-footer container">
+    <p class="footer-copy">© 2026 Nathan</p>
+    <p class="footer-note">Document the process.</p>
+  </footer>
+</body>
+</html>

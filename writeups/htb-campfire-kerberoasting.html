@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hack The Box Campfire: Tracing a Kerberoasting Attack — Nathan</title>
+  <meta name="description" content="A method-focused walkthrough of how Domain Controller and workstation logs are used to reconstruct a Kerberoasting attack.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Hack The Box Campfire: Tracing a Kerberoasting Attack — Nathan">
+  <meta property="og:description" content="A method-focused walkthrough of how Domain Controller and workstation logs are used to reconstruct a Kerberoasting attack.">
+  <meta property="og:image" content="/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/poppins-regular.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/fonts/poppins-bold.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="/assets/css/style.css?v=18">
+  <script src="/assets/js/main.js?v=10" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Nathan",
+    "alternateName": "skibidin4than",
+    "url": "/",
+    "sameAs": [
+      "https://github.com/skibidin4than",
+      "https://www.credly.com/users/skibidin4than/badges"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Hack The Box Campfire: Tracing a Kerberoasting Attack",
+    "description": "A method-focused walkthrough of how Domain Controller and workstation logs are used to reconstruct a Kerberoasting attack.",
+    "datePublished": "2026-11-06",
+    "author": {
+      "@type": "Person",
+      "name": "Nathan",
+      "alternateName": "skibidin4than"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="nav-brand" href="/">nathan<span>.</span></a>
+      <div class="nav-links">
+        <a class="nav-link active" href="/writeups/">writeups</a>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
+    <article class="article">
+      <header class="article-header">
+        <div class="article-meta">
+          <time datetime="2026-11-06">2026-11-06</time>
+          <span class="lvl lvl-easy">Easy</span>
+          <span class="cat">Digital Forensics</span>
+        </div>
+        <h1 class="article-title">Hack The Box Campfire: Tracing a Kerberoasting Attack</h1>
+        <p class="article-description">A method-focused walkthrough of how Domain Controller and workstation logs are used to reconstruct a Kerberoasting attack.</p>
+        <div class="article-tags">
+          <span class="tag-chip">DFIR</span>
+          <span class="tag-chip">Windows Event Logs</span>
+          <span class="tag-chip">Kerberoasting</span>
+          <span class="tag-chip">Prefetch</span>
+          <span class="tag-chip">MITRE ATT&amp;CK</span>
+        </div>
+      </header>
+      <div class="article-body">
+        <p>Campfire is a Hack The Box forensics challenge. We investigate Windows artifacts and Domain Controller event logs to reconstruct a Kerberoasting attack step by step, parsing the data with our own Python scripts.</p>
+
+        <h2><span class="step-number">01</span> Set up local parsing</h2>
+        <p>Event logs are stored in the binary .evtx format, so we parse them locally with python-evtx and read each record as XML. We do this because it lets us filter on exact fields and check every finding on our own machine before we submit anything.</p>
+        <pre><code>import os
+import xml.etree.ElementTree as ET
+from Evtx.Evtx import Evtx</code></pre>
+
+        <h2><span class="step-number">02</span> Domain Controller security log</h2>
+        <p>We start at the Domain Controller security log. Kerberoasting works by requesting Kerberos service tickets for Service Principal Names (SPNs), so we look for Event ID 4769, which records a service ticket (TGS) request (ATT&amp;CK T1558.003 Kerberoasting).</p>
+        <p>For each 4769 record we read the event fields and keep two things apart: the account that requested the ticket, and the service the ticket was requested for. Mixing them up is an easy mistake. We confirm the workstation's IP address from the workstation authentication logs instead of assuming it.</p>
+
+        <h2><span class="step-number">03</span> PowerShell enumeration</h2>
+        <p>Before roasting, an attacker usually maps Active Directory. We inspect the PowerShell Operational log on the workstation, looking through script block logs and execution entries for enumeration activity (ATT&amp;CK T1059.001 PowerShell). We want to know what was run and where it was loaded from, so we rebuild the full path from the log entries.</p>
+
+        <h2><span class="step-number">04</span> Prefetch artifacts</h2>
+        <p>Next we move to the workstation's file system and examine the Prefetch folder. Prefetch records that a program ran and when, so it helps us identify the tool used and its execution time.</p>
+        <p>We parse the Prefetch files with a parser such as PECmd and read the last-run value, which gives a precise UTC timestamp, so we never have to guess one.</p>
+        <p>We keep the sources separate. Domain Controller log times describe events on the Domain Controller, while Prefetch times describe execution on the workstation. Each question must be answered from the right source.</p>
+
+        <div class="takeaway">
+          <p class="takeaway-label">KEY TAKEAWAY</p>
+          <p>Different sources answer different questions: Domain Controller logs show who requested tickets, and workstation artifacts show what ran and when. Keep them separate, then join them on the timeline.</p>
+        </div>
+      </div>
+      <footer class="article-footer"><a class="article-back back" href="/writeups/">Back to writeups</a></footer>
+    </article>
+  </main>
+  <footer class="site-footer container">
+    <p class="footer-copy">© 2026 Nathan</p>
+    <p class="footer-note">Document the process.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Nuclear Facility: Identifying an Underground Site — Nathan</title>
+  <meta name="description" content="Identifying an underground facility from a mock intelligence report by combining country attribution, historical context and spatial reference points.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The Nuclear Facility: Identifying an Underground Site — Nathan">
+  <meta property="og:description" content="Identifying an underground facility from a mock intelligence report by combining country attribution, historical context and spatial reference points.">
+  <meta property="og:image" content="/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/poppins-regular.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/fonts/poppins-bold.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="/assets/css/style.css?v=18">
+  <script src="/assets/js/main.js?v=10" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Nathan",
+    "alternateName": "skibidin4than",
+    "url": "/",
+    "sameAs": [
+      "https://github.com/skibidin4than",
+      "https://www.credly.com/users/skibidin4than/badges"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The Nuclear Facility: Identifying an Underground Site",
+    "description": "Identifying an underground facility from a mock intelligence report by combining country attribution, historical context and spatial reference points.",
+    "datePublished": "2026-11-06",
+    "author": {
+      "@type": "Person",
+      "name": "Nathan",
+      "alternateName": "skibidin4than"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="nav-brand" href="/">nathan<span>.</span></a>
+      <div class="nav-links">
+        <a class="nav-link active" href="/writeups/">writeups</a>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
+    <article class="article">
+      <header class="article-header">
+        <div class="article-meta">
+          <time datetime="2026-11-06">2026-11-06</time>
+          <span class="lvl lvl-medium">Medium</span>
+          <span class="cat">GEO-INT</span>
+        </div>
+        <h1 class="article-title">The Nuclear Facility: Identifying an Underground Site</h1>
+        <p class="article-description">Identifying an underground facility from a mock intelligence report by combining country attribution, historical context and spatial reference points.</p>
+        <div class="article-tags">
+          <span class="tag-chip">GEO-INT</span>
+          <span class="tag-chip">IMINT</span>
+          <span class="tag-chip">Historical OSINT</span>
+          <span class="tag-chip">Country Attribution</span>
+        </div>
+      </header>
+      <div class="article-body">
+        <p>In this challenge we receive a mock intelligence report about an underground nuclear facility. It is built from a mix of real facilities. Unlike the earlier port challenge, which relied on the visual layout of a scene, this one depends on Historical OSINT (public history) and recognising geographic patterns. The goal is to find the target city.</p>
+
+        <h2><span class="step-number">01</span> Country attribution</h2>
+        <p>Before looking for coordinates we settle the country. Searching the whole world is pointless, and a wrong country makes every later step wrong.</p>
+        <p>The report's open-source cross-reference section gives explicit indicators that we can combine: the script on road signs, the vehicle manufacturers that dominate the traffic, a named military formation present at the site, and the regional power grid the facility connects to. We rely on several independent indicators so that a single misleading one cannot send us in the wrong direction. Together they leave only one possible country.</p>
+
+        <h2><span class="step-number">02</span> Read the historical context</h2>
+        <p>A closing line of the report gives historical context: when the facility first became public and how it was built to resist aerial bombardment. This one clue removes most of the search work.</p>
+        <p>The reason is that, within one country, facilities of the same type differ in two ways we can check from public sources: how they were built (inside a mountain or on open ground) and when they became publicly known. We list the country's known facilities of this type and compare each against the report. Only one fits both properties, which gives us the facility's name.</p>
+
+        <h2><span class="step-number">03</span> Spatial analysis and reference point</h2>
+        <p>Once the facility is identified, we need the nearby city that anchors it geographically. The report gives the facility's approximate distance and compass direction from a major city, and an elevation above sea level.</p>
+        <p>We look the facility up in Google Earth Pro or Wikipedia to get its coordinates. From there we measure the distance and bearing to the large cities around it. The city that matches the report's stated distance and direction, and whose terrain matches the stated elevation, is our answer.</p>
+
+        <h2><span class="step-number">04</span> Limits of the evidence</h2>
+        <p>The report is a mock document based on a composite of real facilities. Everything we used comes from the challenge text and was not independently verified: the cross-reference indicators, the historical context, and the stated distance, direction and elevation. We only checked the final location against public maps.</p>
+
+        <div class="takeaway">
+          <p class="takeaway-label">KEY TAKEAWAY</p>
+          <p>Intersecting independent filters (country, facility type and public disclosure history) narrows the search far faster than scanning a map blindly.</p>
+        </div>
+      </div>
+      <footer class="article-footer"><a class="article-back back" href="/writeups/">Back to writeups</a></footer>
+    </article>
+  </main>
+  <footer class="site-footer container">
+    <p class="footer-copy">© 2026 Nathan</p>
+    <p class="footer-note">Document the process.</p>
+  </footer>
+</body>
+</html>

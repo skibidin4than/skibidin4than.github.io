@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forensic Analysis: Tracking a Corporate Network Intrusion — Nathan</title>
+  <meta name="description" content="A walkthrough of a 48-hour gateway firewall log that covers an intrusion from initial compromise to data exfiltration.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Forensic Analysis: Tracking a Corporate Network Intrusion — Nathan">
+  <meta property="og:description" content="A walkthrough of a 48-hour gateway firewall log that covers an intrusion from initial compromise to data exfiltration.">
+  <meta property="og:image" content="/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/poppins-regular.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/fonts/poppins-bold.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="/assets/css/style.css?v=18">
+  <script src="/assets/js/main.js?v=10" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Nathan",
+    "alternateName": "skibidin4than",
+    "url": "/",
+    "sameAs": [
+      "https://github.com/skibidin4than",
+      "https://www.credly.com/users/skibidin4than/badges"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Forensic Analysis: Tracking a Corporate Network Intrusion",
+    "description": "A walkthrough of a 48-hour gateway firewall log that covers an intrusion from initial compromise to data exfiltration.",
+    "datePublished": "2026-11-06",
+    "author": {
+      "@type": "Person",
+      "name": "Nathan",
+      "alternateName": "skibidin4than"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="nav-brand" href="/">nathan<span>.</span></a>
+      <div class="nav-links">
+        <a class="nav-link active" href="/writeups/">writeups</a>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
+    <article class="article">
+      <header class="article-header">
+        <div class="article-meta">
+          <time datetime="2026-11-06">2026-11-06</time>
+          <span class="lvl lvl-medium">Medium</span>
+          <span class="cat">Network Forensics</span>
+        </div>
+        <h1 class="article-title">Forensic Analysis: Tracking a Corporate Network Intrusion</h1>
+        <p class="article-description">A walkthrough of a 48-hour gateway firewall log that covers an intrusion from initial compromise to data exfiltration.</p>
+        <div class="article-tags">
+          <span class="tag-chip">Network Forensics</span>
+          <span class="tag-chip">Blue Team</span>
+          <span class="tag-chip">Log Analysis</span>
+          <span class="tag-chip">MITRE ATT&amp;CK</span>
+        </div>
+      </header>
+      <div class="article-body">
+        <p>The Security Operations Center (SOC) detected abnormal traffic patterns on the corporate gateway firewall. The material is a 48-hour access log of all incoming and outgoing traffic. The incident covers the full life cycle of a modern attack: initial compromise, a covert communication channel, internal lateral movement, credential harvesting, and finally data exfiltration.</p>
+
+        <h2><span class="step-number">01</span> Initial access</h2>
+        <p>Analysis points to a user workstation in the internal network zone as the starting point. This host began browsing suspicious external domains and downloading binary files, which triggered traffic anomalies in the security logs.</p>
+        <p>We start from the first anomalous host because it anchors the timeline. Every later event is read relative to it.</p>
+
+        <h2><span class="step-number">02</span> Command-and-control channel</h2>
+        <p>After the compromise, the affected host showed consistent, periodic communication (beaconing) at regular intervals, on a non-standard port (ATT&amp;CK T1571 Non-Standard Port). The traffic was encrypted (T1573 Encrypted Channel) and repeated throughout the monitoring period.</p>
+        <p>Regular timing matters because people browse irregularly, while malware checking in with a controller does not. This pattern is consistent with an attacker keeping remote access to the host.</p>
+
+        <h2><span class="step-number">03</span> Lateral movement and credential harvesting</h2>
+        <p>Internal scanning: the attacker scanned for internal file-sharing services across several subnets (T1046 Network Service Discovery). We look at this because scanning is how an attacker maps the network before choosing targets.</p>
+        <p>Service ticket requests: the logs show Kerberos service ticket requests to the domain controller for the Service Principal Names (SPNs) of critical database and file services (T1558.003 Kerberoasting). This matters because service tickets can be requested by any domain user, so requests for many SPNs are a known sign of credential harvesting.</p>
+        <p>Critical asset access: according to the case summary, the attacker then accessed database and file servers and read confidential documents, financial records and personal data.</p>
+
+        <h2><span class="step-number">04</span> Data exfiltration</h2>
+        <p>This phase is marked by a volume anomaly: outgoing data (bytes_tx) far exceeds incoming data (bytes_rx). Ordinary client traffic downloads more than it uploads, so a reversal of that ratio stands out. The attacker used standard command-line utilities wrapped in HTTPS to stage and send the stolen files to an external server.</p>
+
+        <h2><span class="step-number">05</span> Anti-forensics</h2>
+        <p>Before the log period ended there were attempts to run log-clearing scripts and remote command execution to erase traces on the targeted systems (T1070 Indicator Removal). Clearing logs is typically one of the last things an attacker does, so it supports placing this at the end of the timeline.</p>
+
+        <h2><span class="step-number">06</span> How to approach the log yourself</h2>
+        <p>Filter external traffic anomalies: compare legitimate business traffic (cloud services, collaboration tools, code repositories) with external connections that use unusual ports or administrative utilities.</p>
+        <p>Analyse byte ratios: find sessions where the volume sent outward (bytes_tx) suddenly spikes.</p>
+        <p>Correlate the timeline: match the period right after confidential files were read on internal servers with outgoing sessions to external IP addresses.</p>
+
+        <div class="takeaway">
+          <p class="takeaway-label">KEY TAKEAWAY</p>
+          <p>An intrusion is a chain, not a single event. Following the timeline stage by stage and matching each stage to what the logs show turns scattered anomalies into one story.</p>
+        </div>
+      </div>
+      <footer class="article-footer"><a class="article-back back" href="/writeups/">Back to writeups</a></footer>
+    </article>
+  </main>
+  <footer class="site-footer container">
+    <p class="footer-copy">© 2026 Nathan</p>
+    <p class="footer-note">Document the process.</p>
+  </footer>
+</body>
+</html>

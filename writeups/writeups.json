@@ -1,0 +1,56 @@
+[
+  {
+    "date": "2026-11-06",
+    "title": "Hack The Box Campfire: Tracing a Kerberoasting Attack",
+    "level": "Easy",
+    "category": "Digital Forensics",
+    "url": "/writeups/htb-campfire-kerberoasting.html",
+    "description": "A method-focused walkthrough of how Domain Controller and workstation logs are used to reconstruct a Kerberoasting attack.",
+    "minutes": 2
+  },
+  {
+    "date": "2026-11-06",
+    "title": "Deepfake Detection Challenge: Dissecting a Synthetic Video",
+    "level": "Hard",
+    "category": "Multimedia Forensics",
+    "url": "/writeups/deepfake-detection-challenge.html",
+    "description": "How a forensic report on a suspected deepfake of a political figure is read across visual, temporal, audio and frequency evidence.",
+    "minutes": 3
+  },
+  {
+    "date": "2026-11-06",
+    "title": "The Container Ship Mystery: Tracing the EVER GOLDEN",
+    "level": "Hard",
+    "category": "GEO-INT",
+    "url": "/writeups/container-ship-mystery.html",
+    "description": "Finding the port where a container-ship photo was taken, using only a written description, by filtering candidates and cross-validating each clue.",
+    "minutes": 3
+  },
+  {
+    "date": "2026-11-06",
+    "title": "The Nuclear Facility: Identifying an Underground Site",
+    "level": "Medium",
+    "category": "GEO-INT",
+    "url": "/writeups/nuclear-facility-underground-site.html",
+    "description": "Identifying an underground facility from a mock intelligence report by combining country attribution, historical context and spatial reference points.",
+    "minutes": 2
+  },
+  {
+    "date": "2026-11-06",
+    "title": "Forensic Analysis: Tracking a Corporate Network Intrusion",
+    "level": "Medium",
+    "category": "Network Forensics",
+    "url": "/writeups/corporate-network-intrusion.html",
+    "description": "A walkthrough of a 48-hour gateway firewall log that covers an intrusion from initial compromise to data exfiltration.",
+    "minutes": 2
+  },
+  {
+    "date": "2026-11-06",
+    "title": "A Methodical Approach to Digital Investigations",
+    "level": "Beginner",
+    "category": "Methodology",
+    "url": "/writeups/methodology-example.html",
+    "description": "A practical framework for organizing, documenting and validating information during digital investigations.",
+    "minutes": 2
+  }
+]
