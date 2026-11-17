@@ -81,7 +81,6 @@ button:focus-visible {
   margin-inline: auto;
 }
 
-/* ---------- header ---------- */
 
 .site-header {
   position: sticky;
@@ -134,7 +133,6 @@ button:focus-visible {
   padding-top: 56px;
 }
 
-/* ---------- hero ---------- */
 
 .hero {
   padding: 0 0 48px;
@@ -238,7 +236,6 @@ button:focus-visible {
   stroke-linejoin: round;
 }
 
-/* ---------- sections ---------- */
 
 .section {
   padding: 48px 0;
@@ -292,7 +289,6 @@ button:focus-visible {
   background: #3ddc84;
 }
 
-/* ---------- projects ---------- */
 
 .project-list {
   display: grid;
@@ -347,7 +343,6 @@ button:focus-visible {
   line-height: 1.65;
 }
 
-/* ---------- skills ---------- */
 
 .skill-group {
   margin: 0 0 22px;
@@ -387,7 +382,6 @@ button:focus-visible {
   color: var(--text);
 }
 
-/* ---------- certifications (code + full name) ---------- */
 
 .cert-list {
   display: grid;
@@ -433,7 +427,6 @@ button:focus-visible {
   font-size: 12.5px;
 }
 
-/* ---------- footer ---------- */
 
 .site-footer {
   display: flex;
@@ -477,7 +470,6 @@ button:focus-visible {
   color: var(--accent);
 }
 
-/* ---------- writeups ---------- */
 
 .writeups-page .hero {
   padding-bottom: 32px;
@@ -594,7 +586,6 @@ button:focus-visible {
   color: var(--text);
 }
 
-/* ---------- article ---------- */
 
 .article {
   width: 100%;
@@ -800,7 +791,6 @@ button:focus-visible {
   margin: 28px 0 0;
 }
 
-/* ---------- layout ---------- */
 
 .section-heading {
   display: block;
@@ -829,7 +819,6 @@ button:focus-visible {
   }
 }
 
-/* ---------- responsive ---------- */
 
 @media (max-width: 520px) {
   .container {
