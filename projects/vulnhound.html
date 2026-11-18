@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VulnHound, Nathan</title>
+  <meta name="description" content="Modular bug bounty scanner. Twelve checks, one finding at a time, every candidate validated by hand before it is ever reported.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="VulnHound, Nathan">
+  <meta property="og:description" content="Modular bug bounty scanner. Twelve checks, one finding at a time, every candidate validated by hand before it is ever reported.">
+  <meta property="og:image" content="/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css?v=20">
+  <script src="/assets/js/main.js?v=10" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="nav-brand" href="/">nathan<span>.</span></a>
+      <div class="nav-links">
+        <a class="nav-link" href="/#projects">projects</a>
+        <a class="nav-link" href="/writeups/">writeups</a>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
+    <article class="article">
+      <header class="article-header">
+        <img class="project-logo" src="/assets/img/vulnhound-logo.png" alt="VulnHound logo" width="96" height="96">
+        <div class="article-meta">
+          <span>v0.7.0</span>
+          <span class="lvl lvl-hard">Python tool</span>
+          <span class="cat">Bug bounty</span>
+        </div>
+        <h1 class="article-title">VulnHound</h1>
+        <p class="article-description">Modular bug bounty scanner. Twelve checks, one finding at a time, every candidate validated by hand before it is ever reported.</p>
+        <div class="article-tags">
+          <span class="tag-chip">Bug bounty</span>
+          <span class="tag-chip">Modular</span>
+          <span class="tag-chip">Python</span>
+          <span class="tag-chip">Private</span>
+        </div>
+      </header>
+      <div class="article-body">
+        <h2><span class="step-number">01</span> What it does</h2>
+        <p>VulnHound is a private, modular bug bounty tool. It runs one check at a time, twelve scanners plus two commands, and saves every finding as structured JSON.</p>
+        <p>The terminal shows a short summary only. Findings live in files, grouped by category, with severity, confidence, and status.</p>
+        <p>It was built for one target first, then made generic. Per-program profiles decide which modules are allowed, so the same tool can hunt on other programs by switching profiles.</p>
+        <p>Nothing is submitted automatically. A candidate is a lead, not a bug, until a human validates it.</p>
+
+        <h2><span class="step-number">02</span> The twelve checks</h2>
+        <ul class="cmd-list">
+          <li><code>idor</code>, one account reading or changing another account's resource.</li>
+          <li><code>webhook</code>, SSRF through webhook URLs that resolve to private IPs.</li>
+          <li><code>xss</code>, reflected cross-site scripting, probed with unique markers.</li>
+          <li><code>limit</code>, bypass of download limits and link expiry.</li>
+          <li><code>privesc</code>, free to Pro privilege escalation.</li>
+          <li><code>session</code>, session handling, tampered tokens, and logout invalidation.</li>
+          <li><code>massassign</code>, extra fields smuggled into update requests.</li>
+          <li><code>disclosure</code>, sensitive files and endpoints left public.</li>
+          <li><code>storedxss</code>, payloads stored in a field and executed on view.</li>
+          <li><code>redirect</code>, open redirects in URL parameters.</li>
+          <li><code>preview</code>, SSRF through link preview fetching.</li>
+          <li><code>authbypass</code>, protected pages reached without a valid session.</li>
+        </ul>
+        <p>Two commands support the hunt. <code>report</code> turns a validated finding into a redacted draft, and <code>retest</code> checks whether an old finding is still there.</p>
+
+        <h2><span class="step-number">03</span> Example output</h2>
+        <p>This is demo mode output, example.com with simulated data. No real target, no real requests.</p>
+        <pre><code>[idor] done: 3 candidate(s) (2 high, 1 medium, 0 low), 2 ambiguous, 1 error(s)
+[webhook] done: 3 candidate(s) (3 high, 0 medium, 0 low), 0 ambiguous, 0 error(s)
+[xss] done: 1 candidate(s) (1 high, 0 medium, 0 low), 2 ambiguous, 1 error(s)
+[limit] done: 2 candidate(s) (2 high, 0 medium, 0 low), 1 ambiguous, 2 error(s)
+[privesc] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 2 error(s)
+[session] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
+[massassign] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 2 error(s)
+[disclosure] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
+[storedxss] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
+[redirect] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
+[preview] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
+[authbypass] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
+All done: 17 candidate(s), 13 ambiguous, 14 error(s) total
+Candidates only. Validate manually before any report.</code></pre>
+
+        <h2><span class="step-number">04</span> Rules</h2>
+        <p>Private and not open source. There is no download link and no repository link.</p>
+        <p>Only in-scope targets, only your own accounts, and slow by design, with a delay between requests.</p>
+        <p>Scanner output is never submitted as a report. One vulnerability per report, validated by hand first.</p>
+
+        <div class="takeaway">
+          <p class="takeaway-label">NOTE</p>
+          <p>The example output above is from demo mode (example.com, simulated data). Real findings stay private and are never shown here.</p>
+        </div>
+      </div>
+      <footer class="article-footer"><a class="article-back back" href="/#projects">Back to projects</a></footer>
+    </article>
+  </main>
+  <footer class="site-footer container">
+    <p class="footer-copy">© 2026 Nathan</p>
+    <p class="footer-note">Method over answers.</p>
+  </footer>
+</body>
+</html>
