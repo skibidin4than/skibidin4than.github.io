@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VulnHound, Nathan</title>
-  <meta name="description" content="Modular bug bounty scanner. Twelve checks, one finding at a time, every candidate validated by hand before it is ever reported.">
+  <meta name="description" content="Modular bug bounty scanner. Twenty-two checks, one finding at a time, every candidate validated by hand before it is ever reported.">
   <meta name="theme-color" content="#000000">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <meta property="og:type" content="website">
   <meta property="og:title" content="VulnHound, Nathan">
-  <meta property="og:description" content="Modular bug bounty scanner. Twelve checks, one finding at a time, every candidate validated by hand before it is ever reported.">
+  <meta property="og:description" content="Modular bug bounty scanner. Twenty-two checks, one finding at a time, every candidate validated by hand before it is ever reported.">
   <meta property="og:image" content="/assets/img/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,12 +34,12 @@
       <header class="article-header">
         <img class="project-logo" src="/assets/img/vulnhound-logo.png" alt="VulnHound logo" width="96" height="96">
         <div class="article-meta">
-          <span>v0.7.0</span>
+          <span>v1.0.5</span>
           <span class="lvl lvl-hard">Python tool</span>
           <span class="cat">Bug bounty</span>
         </div>
         <h1 class="article-title">VulnHound</h1>
-        <p class="article-description">Modular bug bounty scanner. Twelve checks, one finding at a time, every candidate validated by hand before it is ever reported.</p>
+        <p class="article-description">Modular bug bounty scanner. Twenty-two checks, one finding at a time, every candidate validated by hand before it is ever reported.</p>
         <div class="article-tags">
           <span class="tag-chip">Bug bounty</span>
           <span class="tag-chip">Modular</span>
@@ -49,12 +49,12 @@
       </header>
       <div class="article-body">
         <h2><span class="step-number">01</span> What it does</h2>
-        <p>VulnHound is a private, modular bug bounty tool. It runs one check at a time, twelve scanners plus two commands, and saves every finding as structured JSON.</p>
+        <p>VulnHound is a private, modular bug bounty tool. It runs one check at a time, twenty-two modules, and saves every finding as structured JSON.</p>
         <p>The terminal shows a short summary only. Findings live in files, grouped by category, with severity, confidence, and status.</p>
         <p>It was built for one target first, then made generic. Per-program profiles decide which modules are allowed, so the same tool can hunt on other programs by switching profiles.</p>
         <p>Nothing is submitted automatically. A candidate is a lead, not a bug, until a human validates it.</p>
 
-        <h2><span class="step-number">02</span> The twelve checks</h2>
+        <h2><span class="step-number">02</span> The checks</h2>
         <ul class="cmd-list">
           <li><code>idor</code>, one account reading or changing another account's resource.</li>
           <li><code>webhook</code>, SSRF through webhook URLs that resolve to private IPs.</li>
@@ -68,8 +68,18 @@
           <li><code>redirect</code>, open redirects in URL parameters.</li>
           <li><code>preview</code>, SSRF through link preview fetching.</li>
           <li><code>authbypass</code>, protected pages reached without a valid session.</li>
+          <li><code>cors</code>, cross-origin policies that actually leak data.</li>
+          <li><code>jssecrets</code>, API keys, tokens and credentials leaked in JavaScript.</li>
+          <li><code>sqli</code>, SQL injection, error, boolean and time-based, read-only payloads.</li>
+          <li><code>ssti</code>, server-side template injection.</li>
+          <li><code>lfi</code>, local file inclusion and path traversal.</li>
+          <li><code>jwt</code>, weak JSON Web Tokens: alg none, missing signature, missing expiry.</li>
+          <li><code>graphql</code>, GraphQL introspection left open.</li>
+          <li><code>apidiscovery</code>, API endpoints that leak data.</li>
+          <li><code>takeover</code>, subdomain takeover fingerprints.</li>
+          <li><code>headers</code>, missing or weak security headers.</li>
         </ul>
-        <p>Two commands support the hunt. <code>report</code> turns a validated finding into a redacted draft, and <code>retest</code> checks whether an old finding is still there.</p>
+        <p>The <code>scan</code> command runs the whole hunt from one URL, no profiles needed, with a built-in crawler. <code>report</code> turns a validated finding into a redacted draft, and <code>retest</code> checks whether an old finding is still there.</p>
 
         <h2><span class="step-number">03</span> Example output</h2>
         <p>This is demo mode output, example.com with simulated data. No real target, no real requests.</p>
@@ -92,6 +102,16 @@ Candidates only. Validate manually before any report.</code></pre>
         <p>Private and not open source. There is no download link and no repository link.</p>
         <p>Only in-scope targets, only your own accounts, and slow by design, with a delay between requests.</p>
         <p>Scanner output is never submitted as a report. One vulnerability per report, validated by hand first.</p>
+
+        <h2><span class="step-number">05</span> Changelog</h2>
+        <ul class="cmd-list">
+          <li><code>v1.0.5</code>, 23 Nov 2026 — one-line skip summaries: sqli, ssti and lfi no longer print a line per skipped endpoint.</li>
+          <li><code>v1.0.4</code>, 22 Nov 2026 — jssecrets stops retrying dead third-party scripts and fetches each script once per run.</li>
+          <li><code>v1.0.3</code>, 22 Nov 2026 — live progress display: per-module progress and a request counter in background logs.</li>
+          <li><code>v1.0.1</code>, 22 Nov 2026 — automatic retry with backoff on 429 and 5xx: honours Retry-After, backs off exponentially, slows down adaptively after rate limits.</li>
+          <li><code>headers</code>, 22 Nov 2026 — security-header audit: HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy.</li>
+          <li><code>v1.0.0</code>, 22 Nov 2026 — the scan command (no JSON profiles), a same-origin crawler, and seven new checks: sqli, ssti, lfi, jwt, graphql, apidiscovery, takeover.</li>
+        </ul>
 
         <div class="takeaway">
           <p class="takeaway-label">NOTE</p>
