@@ -10,14 +10,14 @@
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <meta property="og:type" content="website">
   <meta property="og:title" content="PromptProbe, Nathan">
-  <meta property="og:description" content="LLM prompt injection tester. 25 adversarial payloads, canary-based detection, JSON reports. Works with Ollama, OpenAI and any HTTP chatbot API.">
+  <meta property="og:description" content="LLM prompt injection tester. 31 payloads, canary-based detection, compare mode, CI mode. Works with Ollama, OpenAI and any HTTP chatbot API.">
   <meta property="og:image" content="/assets/img/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
-  <link rel="stylesheet" href="/assets/css/style.css?v=20">
-  <script src="/assets/js/main.js?v=10" defer></script>
+  <link rel="stylesheet" href="/assets/css/style.css?v=24">
+  <script src="/assets/js/main.js?v=11" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -33,7 +33,7 @@
     <article class="article">
       <header class="article-header">
         <div class="article-meta">
-          <span>v1.2.0</span>
+          <span>v2.0.0</span>
           <span class="lvl lvl-hard">Python tool</span>
           <span class="cat">LLM security</span>
         </div>
@@ -47,40 +47,80 @@
         </div>
       </header>
       <div class="article-body">
+        <div class="pp-stats">
+          <div class="pp-stat">
+            <p class="pp-stat-num">31</p>
+            <p class="pp-stat-label">payloads, 25 single-turn + 6 multi-turn</p>
+          </div>
+          <div class="pp-stat">
+            <p class="pp-stat-num">37</p>
+            <p class="pp-stat-label">pytest tests in the repo</p>
+          </div>
+          <div class="pp-stat">
+            <p class="pp-stat-num">10</p>
+            <p class="pp-stat-label">provider configs in examples/</p>
+          </div>
+          <div class="pp-stat">
+            <p class="pp-stat-num">2</p>
+            <p class="pp-stat-label">report formats, JSON + HTML</p>
+          </div>
+        </div>
+
         <h2><span class="step-number">01</span> What it does</h2>
-        <p>PromptProbe is a small, dependency-light CLI that fires a battery of prompt-injection payloads at any HTTP chatbot or LLM endpoint and tells you which ones actually worked.</p>
-        <p>It ships 25 adversarial payloads across instruction override, system prompt leaks, jailbreak roleplay, indirect injection and encoding bypasses. Verdicts come from a canary, so they are evidence, not vibes.</p>
-        <p>It works with Ollama, OpenAI-compatible APIs, or a custom chatbot described in about ten lines of JSON. Secrets stay out of the config through <code>$ENV_VAR</code> expansion in URLs and headers.</p>
-        <p>Every run ends in a machine-readable JSON report with the full prompts and replies, ready for triage and proof-of-concept.</p>
+        <p>PromptProbe is a small, dependency-light CLI that fires a battery of prompt-injection payloads at any HTTP chatbot or LLM endpoint and tells you which ones actually worked. Version 2.0.0 is a proper installable package: pip install it, run the <code>promptprobe</code> command, and 37 tests keep it honest.</p>
+        <p>It ships 31 payloads: 25 single-turn attacks across instruction override, system prompt leaks, jailbreak roleplay, indirect injection and encoding bypasses, plus 6 multi-turn attacks that play out over 3 turns each. Verdicts come from a canary, so they are evidence, not vibes.</p>
+        <p>It works with Ollama, OpenAI-compatible APIs, or a custom chatbot described in about ten lines of JSON. Secrets stay out of the config through <code>$ENV_VAR</code> expansion in URLs and headers. Compare mode ranks targets weakest to strongest, CI mode fails the build when something is VULNERABLE, and every run ends in a JSON report plus an HTML report with a risk score out of 100.</p>
 
         <h2><span class="step-number">02</span> How it works</h2>
         <p>Each payload tells the model to print a unique random marker, the canary. What comes back decides the verdict:</p>
         <ul class="cmd-list">
-          <li><code>VULNERABLE</code>, the canary is in the reply, or the system prompt leaked. High confidence, confirmed.</li>
-          <li><code>LIKELY</code>, no canary, but the model complied instead of refusing. Medium confidence, review manually.</li>
-          <li><code>NOT_VULNERABLE</code>, the model refused or ignored the injection.</li>
-          <li><code>ERROR</code>, the request failed: network error, bad config, or an unparseable reply.</li>
+          <li><span class="verdict verdict-vuln">VULNERABLE</span>, the canary is in the reply, or the system prompt leaked. High confidence, confirmed.</li>
+          <li><span class="verdict verdict-likely">LIKELY</span>, no canary, but the model complied instead of refusing. Medium confidence, review manually.</li>
+          <li><span class="verdict verdict-clean">NOT_VULNERABLE</span>, the model refused or ignored the injection.</li>
+          <li><span class="verdict verdict-error">ERROR</span>, the request failed: network error, bad config, or an unparseable reply.</li>
         </ul>
-        <p>Payloads are plain JSON, so adding your own takes a minute. <code>--demo</code> launches a vulnerable mock and a hardened mock, so you can see the tool work with no API key at all.</p>
+        <p>Multi-turn payloads run the same canary check across 3 turns, so a model that holds its ground on turn one can still slip on turn three. Payloads are plain JSON, so adding your own takes a minute. <code>--demo</code> launches a vulnerable mock and a hardened mock, so you can see the tool work with no API key at all.</p>
 
         <h2><span class="step-number">03</span> Payload categories</h2>
-        <ul class="cmd-list">
-          <li><code>instruction_override</code>, direct "ignore previous instructions…" attacks.</li>
-          <li><code>system_prompt_leak</code>, getting the model to recite its hidden system prompt.</li>
-          <li><code>jailbreak</code>, DAN-style personas, role confusion, fake developer messages.</li>
-          <li><code>indirect_injection</code>, instructions hidden inside fake documents or tool output.</li>
-          <li><code>encoding_bypass</code>, Base64, ROT13, language switching to smuggle instructions.</li>
-        </ul>
-        <p>See everything that will be sent with <code>python3 promptprobe.py --list</code>.</p>
+        <div class="pp-cats">
+          <div class="pp-cat">
+            <p class="pp-cat-count">7</p>
+            <p class="pp-cat-name">Jailbreak</p>
+            <p class="pp-cat-desc">DAN-style personas, role confusion, fake developer messages.</p>
+          </div>
+          <div class="pp-cat">
+            <p class="pp-cat-count">6</p>
+            <p class="pp-cat-name">System prompt leak</p>
+            <p class="pp-cat-desc">Getting the model to recite its hidden system prompt.</p>
+          </div>
+          <div class="pp-cat">
+            <p class="pp-cat-count">6</p>
+            <p class="pp-cat-name">Multi-turn</p>
+            <p class="pp-cat-desc">Attacks that play out over 3 turns, not one.</p>
+          </div>
+          <div class="pp-cat">
+            <p class="pp-cat-count">4</p>
+            <p class="pp-cat-name">Instruction override</p>
+            <p class="pp-cat-desc">Direct "ignore previous instructions" attacks.</p>
+          </div>
+          <div class="pp-cat">
+            <p class="pp-cat-count">4</p>
+            <p class="pp-cat-name">Indirect injection</p>
+            <p class="pp-cat-desc">Instructions hidden inside fake documents or tool output.</p>
+          </div>
+          <div class="pp-cat">
+            <p class="pp-cat-count">4</p>
+            <p class="pp-cat-name">Encoding bypass</p>
+            <p class="pp-cat-desc">Base64, ROT13, language switching to smuggle instructions.</p>
+          </div>
+        </div>
+        <p>See everything that will be sent with <code>promptprobe --list</code>.</p>
 
         <h2><span class="step-number">04</span> Example output</h2>
-        <p>Illustrative output from the README, your numbers will differ:</p>
-        <pre><code>[VULNERABLE]      instruction_override / ignore_previous       (high)
-[VULNERABLE]      system_prompt_leak   / repeat_above          (high)
-[LIKELY]          jailbreak            / dan_roleplay          (medium)
-[NOT_VULNERABLE]  encoding_bypass      / base64_smuggle        (medium)
-...
-Summary: 14 payloads | 7 VULNERABLE | 2 LIKELY | 5 NOT_VULNERABLE | 0 ERROR</code></pre>
+        <p>Demo run (<code>promptprobe --demo --compare</code>), summarized. Same 31 payloads, same canary, two opposite answers:</p>
+        <pre class="pp-demo"><code>vulnerable-mock   29 VULNERABLE    2 NOT_VULNERABLE   risk 96/100
+secure-mock        0 VULNERABLE   31 NOT_VULNERABLE   risk 0/100</code></pre>
+        <p>The vulnerable mock obeyed 29 of 31 injections (93.5%). The hardened mock refused all 31. If you run the demo and do not see that split, something is wrong with the install. That is the point of the demo: smoke test, tutorial, and proof the tool works, all in one command.</p>
 
         <h2><span class="step-number">05</span> Target config</h2>
         <p>Describe any HTTP chatbot in JSON. <code>{PROMPT}</code> is replaced with each payload, and <code>reply_path</code> is a dot-path into the JSON response. Example for a local Ollama:</p>
@@ -95,49 +135,51 @@ Summary: 14 payloads | 7 VULNERABLE | 2 LIKELY | 5 NOT_VULNERABLE | 0 ERROR</cod
   },
   "reply_path": "message.content"
 }</code></pre>
-        <p>Ready-made configs live in <code>examples/</code> for Ollama and OpenAI-compatible APIs.</p>
+        <p>Ready-made configs live in <code>examples/</code> for Ollama, OpenAI, Claude, Gemini, Mistral, Groq, DeepSeek, Together, OpenRouter and LM Studio.</p>
 
         <h2><span class="step-number">06</span> Usage</h2>
         <p>No API key needed for the demo:</p>
         <pre><code>git clone https://github.com/skibidin4than/PromptProbe.git
 cd PromptProbe
-pip install -r requirements.txt
-python3 promptprobe.py --demo</code></pre>
+pip install -e .
+promptprobe --demo</code></pre>
         <p>Against a real target:</p>
         <pre><code># Local Ollama
-python3 promptprobe.py --target examples/ollama.json
+promptprobe --target examples/ollama.json
 
 # OpenAI-compatible API (key from environment)
 export OPENAI_API_KEY=&lt;redacted&gt;
-python3 promptprobe.py --target examples/openai.json -o report.json
+promptprobe --target examples/openai.json -o report.json
 
-# One category only
-python3 promptprobe.py --target examples/ollama.json --category system_prompt_leak
+# Compare two targets, weakest first
+promptprobe --compare examples/groq.json examples/gemini.json
 
-# High-severity payloads only
-python3 promptprobe.py --target examples/ollama.json --severity high
+# Multi-turn attacks only
+promptprobe --target examples/ollama.json --multi-turn
+
+# CI mode: exit 1 if anything is VULNERABLE
+promptprobe --target my-target.json --ci
 
 # Rate-limited API: slow down and retry
-python3 promptprobe.py --target my-target.json --delay 1.0 --retries 2</code></pre>
-        <p>Useful flags: <code>--demo</code> for the built-in mocks, <code>--target</code> for a config file, <code>--category</code> and <code>--severity</code> to filter, <code>-o</code> to write the JSON report, <code>--delay</code> and <code>--retries</code> for rate-limited APIs, <code>--list</code> to print all payloads.</p>
+promptprobe --target my-target.json --delay 1.0 --retries 2</code></pre>
+        <p>Useful flags: <code>--demo</code> for the built-in mocks, <code>--compare</code> to rank targets, <code>--ci</code> for CI mode, <code>--html</code> for an HTML report, <code>--multi-turn</code> for the 3-turn attacks, <code>--target</code> for a config file, <code>--category</code> and <code>--severity</code> to filter, <code>-o</code> to write the JSON report, <code>--delay</code> and <code>--retries</code> for rate-limited APIs, <code>--list</code> to print all payloads.</p>
+        <p>PyPI is coming, not here yet: <code>pip install promptprobe</code> will fail until the package is published. Until then, install from the repo. The old <code>python3 promptprobe.py</code> still works too.</p>
 
         <h2><span class="step-number">07</span> Responsible use</h2>
         <p>Only test systems you own or have explicit written authorization to test. Prompt-injection testing sends adversarial input to a model, so treat it like any other security test: get permission first, respect rate limits, and never use results to exfiltrate real data.</p>
-        <p>A VULNERABLE verdict is a lead, not a report — read the full reply in the JSON report, reproduce it once by hand, and validate it with a manual proof-of-concept before reporting anything.</p>
-        <p>Known limitations: a clean run is not proof of safety, it only means these payloads did not work this time. LLM output is non-deterministic, so re-run a few times. LIKELY is heuristic (refusal detection) and can produce false positives. Single-turn only, multi-turn and tool-calling attacks are not covered yet.</p>
+        <p>A VULNERABLE verdict is a lead, not a report. Read the full reply in the JSON report, reproduce it once by hand, and validate it with a manual proof-of-concept before reporting anything.</p>
+        <p>Known limitations: a clean run is not proof of safety, it only means these payloads did not work this time. LLM output is non-deterministic, so re-run a few times. LIKELY is heuristic (refusal detection) and can produce false positives. Streaming-response targets are not covered yet, and neither is tool-use abuse.</p>
 
         <h2><span class="step-number">08</span> Roadmap</h2>
         <ul class="cmd-list">
-          <li>Multi-turn conversation attacks.</li>
-          <li>Markdown and HTML report output.</li>
           <li>Streaming-response targets.</li>
           <li>More payloads: tool-use abuse, markdown-image exfiltration.</li>
-          <li>CI mode with a non-zero exit code when VULNERABLE is found.</li>
+          <li>PyPI release.</li>
         </ul>
 
         <div class="takeaway">
           <p class="takeaway-label">NOTE</p>
-          <p>Open source (MIT) — <a href="https://github.com/skibidin4than/PromptProbe">github.com/skibidin4than/PromptProbe</a>. PRs are welcome, especially new payloads and target examples.</p>
+          <p>Open source (MIT), <a href="https://github.com/skibidin4than/PromptProbe">github.com/skibidin4than/PromptProbe</a>. PRs are welcome, especially new payloads and target examples.</p>
         </div>
       </div>
       <footer class="article-footer"><a class="article-back back" href="/#projects">Back to projects</a></footer>
