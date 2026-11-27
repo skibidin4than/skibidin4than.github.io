@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
-  <link rel="stylesheet" href="/assets/css/style.css?v=20">
+  <link rel="stylesheet" href="/assets/css/style.css?v=22">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -30,8 +30,9 @@
     ]
   }
   </script>
-  <script src="/assets/js/main.js?v=10" defer></script>
+  <script src="/assets/js/main.js?v=11" defer></script>
   <script src="/assets/js/writeups.js?v=2" defer></script>
+  <script type="module" src="/assets/js/ascii-banner.js"></script>
 </head>
 <body class="home">
   <header class="site-header">
@@ -44,13 +45,36 @@
   </header>
   <main class="container page-content">
     <section class="hero" aria-labelledby="intro-title">
-      <div class="avatar"><img src="/assets/img/profile.png" alt="Nathan" width="120" height="120"></div>
-      <p class="hero-kicker">OSINT &amp; blue team</p>
-      <h1 id="intro-title">Nathan</h1>
-      <p class="hero-tag">“And so you touch this limit, something happens and you suddenly can go a little bit further.”<span class="hero-by"><a href="https://en.wikipedia.org/wiki/Ayrton_Senna" target="_blank" rel="noopener noreferrer">Ayrton Senna</a></span></p>
-      <div class="icons">
-        <a class="icon-link" href="https://github.com/skibidin4than" target="_blank" rel="noopener noreferrer"><span class="icon-circle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a11.9 11.9 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></span><span class="icon-label">GitHub</span></a>
-        <a class="icon-link" href="https://redlabs.enterprisesecurity.io/public-profile/80b9596565cbd5cb3e85d1e59316f225aa04292d63f0277ca23d7d09aa2540df" target="_blank" rel="noopener noreferrer"><span class="icon-circle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 19.5a1 1 0 0 0 .9 1.5h12.2a1 1 0 0 0 .9-1.5L14 9V3"/><path d="M7.5 15h9"/></svg></span><span class="icon-label">Red Labs</span></a>
+      <div class="profile-card">
+        <div class="profile-banner">
+          <canvas id="ascii-banner" width="960" height="540" role="img" aria-label="Animated ASCII art: a five tier pagoda among red maples on an autumn evening"></canvas>
+        </div>
+        <div class="profile-main">
+          <div class="profile-identity">
+            <div class="avatar"><img src="/assets/img/profile.png" alt="Nathan" width="120" height="120"><span class="avatar-status" aria-label="Online"></span></div>
+            <div class="profile-names">
+              <p class="hero-kicker">OSINT &amp; blue team</p>
+              <h1 id="intro-title">Nathan</h1>
+              <p class="profile-username">skibidin4than</p>
+            </div>
+          </div>
+          <p class="profile-status">“And so you touch this limit, something happens and you suddenly can go a little bit further.”<span class="profile-by"><a href="https://en.wikipedia.org/wiki/Ayrton_Senna" target="_blank" rel="noopener noreferrer">Ayrton Senna</a></span></p>
+          <ul class="profile-badges">
+            <li>HackerOne</li>
+            <li>CTFtime</li>
+            <li>CyberDefenders</li>
+            <li>SoulSpace</li>
+          </ul>
+          <div class="profile-activity">
+            <p class="profile-activity-label">Currently</p>
+            <p class="profile-activity-title">Building PromptProbe</p>
+            <p class="profile-activity-sub">Prompt injection testing, v2.0.0 live on GitHub</p>
+          </div>
+          <div class="icons">
+            <a class="icon-link" href="https://github.com/skibidin4than" target="_blank" rel="noopener noreferrer"><span class="icon-circle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a11.9 11.9 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></span><span class="icon-label">GitHub</span></a>
+            <a class="icon-link" href="https://redlabs.enterprisesecurity.io/public-profile/80b9596565cbd5cb3e85d1e59316f225aa04292d63f0277ca23d7d09aa2540df" target="_blank" rel="noopener noreferrer"><span class="icon-circle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 19.5a1 1 0 0 0 .9 1.5h12.2a1 1 0 0 0 .9-1.5L14 9V3"/><path d="M7.5 15h9"/></svg></span><span class="icon-label">Red Labs</span></a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -118,7 +142,7 @@
           <p class="project-description">Discord bot that auto-deletes phishing and spam messages, timeouts the sender, and reports to mods. Kick and ban stay with the server owner.</p>
         </article>
         <article class="project">
-          <div class="project-top"><h3><a href="/projects/typoshield.html">TypoShield</a></h3><span class="project-status progress">under review</span></div>
+          <div class="project-top"><h3><a href="/projects/typoshield.html">TypoShield</a></h3><span class="project-status live">live</span></div>
           <p class="project-description">Firefox extension that warns you when a site imitates a trusted brand. Typosquat and phishing protection focused on Southeast Asia.</p>
         </article>
       </div>
@@ -155,13 +179,14 @@
       <h2 class="section-heading"><span class="section-num">07</span> Community</h2>
       <div class="section-content">
         <p class="body-text">Member of SoulSpace, a CTF team of students from physics, law, business and medicine.</p>
-        <p class="body-text">Also learning bug bounty in a small Discord community, asking questions and studying, not hunting yet.</p>
+        <p class="body-text">Also hunting bug bounties in a small Discord community.</p>
       </div>
     </section>
   </main>
   <footer class="site-footer container">
     <p class="footer-copy">© 2026 Nathan</p>
     <p class="footer-note">Method over answers.</p>
+    <p class="footer-credit">Banner: <a href="https://ascii-magic.com/ascii/autumn-pagoda-maples" target="_blank" rel="noopener noreferrer">Autumn Pagoda Maples</a> by Ascii Magic, MIT licensed.</p>
   </footer>
 </body>
 </html>
