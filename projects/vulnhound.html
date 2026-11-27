@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VulnHound, Nathan</title>
-  <meta name="description" content="Modular bug bounty scanner. Twenty-two checks, one finding at a time, every candidate validated by hand before it is ever reported.">
+  <meta name="description" content="Modular bug bounty scanner. Twenty-eight modules, one finding at a time, every candidate validated by hand before it is ever reported.">
   <meta name="theme-color" content="#000000">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <meta property="og:type" content="website">
   <meta property="og:title" content="VulnHound, Nathan">
-  <meta property="og:description" content="Modular bug bounty scanner. Twenty-two checks, one finding at a time, every candidate validated by hand before it is ever reported.">
+  <meta property="og:description" content="Modular bug bounty scanner. Twenty-eight modules, one finding at a time, every candidate validated by hand before it is ever reported.">
   <meta property="og:image" content="/assets/img/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
-  <link rel="stylesheet" href="/assets/css/style.css?v=20">
-  <script src="/assets/js/main.js?v=10" defer></script>
+  <link rel="stylesheet" href="/assets/css/style.css?v=25">
+  <script src="/assets/js/main.js?v=11" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -34,12 +34,12 @@
       <header class="article-header">
         <img class="project-logo" src="/assets/img/vulnhound-logo.png" alt="VulnHound logo" width="96" height="96">
         <div class="article-meta">
-          <span>v1.0.5</span>
+          <span>v1.4.1</span>
           <span class="lvl lvl-hard">Python tool</span>
           <span class="cat">Bug bounty</span>
         </div>
         <h1 class="article-title">VulnHound</h1>
-        <p class="article-description">Modular bug bounty scanner. Twenty-two checks, one finding at a time, every candidate validated by hand before it is ever reported.</p>
+        <p class="article-description">Modular bug bounty scanner. Twenty-eight modules, one finding at a time, every candidate validated by hand before it is ever reported.</p>
         <div class="article-tags">
           <span class="tag-chip">Bug bounty</span>
           <span class="tag-chip">Modular</span>
@@ -48,8 +48,27 @@
         </div>
       </header>
       <div class="article-body">
+        <div class="pp-stats">
+          <div class="pp-stat">
+            <p class="pp-stat-num">28</p>
+            <p class="pp-stat-label">modules, 26 checks + report + retest</p>
+          </div>
+          <div class="pp-stat">
+            <p class="pp-stat-num">2</p>
+            <p class="pp-stat-label">findings validated by hand so far</p>
+          </div>
+          <div class="pp-stat">
+            <p class="pp-stat-num">1</p>
+            <p class="pp-stat-label">confirmed real, status triaged</p>
+          </div>
+          <div class="pp-stat">
+            <p class="pp-stat-num">1</p>
+            <p class="pp-stat-label">false positive, caught by hand</p>
+          </div>
+        </div>
+
         <h2><span class="step-number">01</span> What it does</h2>
-        <p>VulnHound is a private, modular bug bounty tool. It runs one check at a time, twenty-two modules, and saves every finding as structured JSON.</p>
+        <p>VulnHound is a private, modular bug bounty tool. It runs one check at a time, twenty-eight modules, and saves every finding as structured JSON.</p>
         <p>The terminal shows a short summary only. Findings live in files, grouped by category, with severity, confidence, and status.</p>
         <p>It was built for one target first, then made generic. Per-program profiles decide which modules are allowed, so the same tool can hunt on other programs by switching profiles.</p>
         <p>Nothing is submitted automatically. A candidate is a lead, not a bug, until a human validates it.</p>
@@ -78,44 +97,54 @@
           <li><code>apidiscovery</code>, API endpoints that leak data.</li>
           <li><code>takeover</code>, subdomain takeover fingerprints.</li>
           <li><code>headers</code>, missing or weak security headers.</li>
+          <li><code>bruteforce</code>, login endpoints that never lock out, show a captcha, or rate-limit.</li>
+          <li><code>csrf</code>, state-changing endpoints missing Origin, Referer, or token protection.</li>
+          <li><code>graphql_idor</code>, the same GraphQL query as the owner, as another user, and with no session, responses compared.</li>
+          <li><code>xxe</code>, XML request bodies parsed with external entities enabled.</li>
         </ul>
-        <p>The <code>scan</code> command runs the whole hunt from one URL, no profiles needed, with a built-in crawler. <code>report</code> turns a validated finding into a redacted draft, and <code>retest</code> checks whether an old finding is still there.</p>
+        <p>The <code>scan</code> command runs the whole hunt from one URL, no profiles needed, with a built-in crawler. Deep mode validates a session, crawls behind a login, and auto-discovers IDOR and XSS targets. <code>report</code> turns a validated finding into a redacted draft, and <code>retest</code> checks whether an old finding is still there.</p>
 
-        <h2><span class="step-number">03</span> Example output</h2>
-        <p>This is demo mode output, example.com with simulated data. No real target, no real requests.</p>
-        <pre><code>[idor] done: 3 candidate(s) (2 high, 1 medium, 0 low), 2 ambiguous, 1 error(s)
-[webhook] done: 3 candidate(s) (3 high, 0 medium, 0 low), 0 ambiguous, 0 error(s)
-[xss] done: 1 candidate(s) (1 high, 0 medium, 0 low), 2 ambiguous, 1 error(s)
-[limit] done: 2 candidate(s) (2 high, 0 medium, 0 low), 1 ambiguous, 2 error(s)
-[privesc] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 2 error(s)
-[session] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
-[massassign] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 2 error(s)
-[disclosure] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
-[storedxss] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
-[redirect] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
-[preview] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
-[authbypass] done: 1 candidate(s) (1 high, 0 medium, 0 low), 1 ambiguous, 1 error(s)
-All done: 17 candidate(s), 13 ambiguous, 14 error(s) total
-Candidates only. Validate manually before any report.</code></pre>
+        <h2><span class="step-number">03</span> Real output</h2>
+        <p>The real startup banner, printed by the tool itself. No demo mode, no simulated data.</p>
+        <pre class="vh-banner"><code>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣄⣄⣀⣀⣄⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣠⣶⣿⢫⣿⡟⠋⠀⠀⠉⠹⠟⠁⠀⠈⠙⢿⣻⡝⣿⣶⡄⠀⠀⠀⠀⠀  __      ___    _ _      _   _ _    _  ____  _    _ _   _ _____
+⠀⠀⠀⠀⣰⣿⣿⠇⣺⡟⠠⠦⣤⣀⣀⠀⠀⣀⣀⣤⠦⠂⢻⣷⠸⣿⣿⣆⠀⠀⠀⠀  \ \    / / |  | | |    | \ | | |  | |/ __ \| |  | | \ | |  __ \
+⠀⠀⠀⠀⣿⣿⣻⡅⣿⡇⠀⠨⣿⡏⠁⠀⠀⠈⠹⣿⠆⠀⢸⣿⢨⣿⣿⣿⠀⠀⠀⠀   \ \  / /| |  | | |    |  \| | |__| | |  | | |  | |  \| | |  | |
+⠀⠀⠀⢨⣿⣿⣿⡆⣿⣿⡄⠀⡁⠀⠀⠀⠀⠀⠀⣁⠀⢠⣿⣿⢰⣿⣿⢿⡂⠀⠀⠀    \ \/ / | |  | | |    | . ` |  __  | |  | | |  | | . ` | |  | |
+⠀⠀⠀⢸⣿⣟⣿⡇⢺⣿⣇⠎⠀⠀⣀⣀⣀⢀⠀⠀⠣⣼⣿⡇⣺⣿⣿⣿⡇⠀⠀⠀     \  /  | |__| | |____| |\  | |  | | |__| | |__| | |\  | |__| |
+⠀⠀⠀⣼⣿⣿⣿⣿⠈⣿⠇⠀⠀⠸⡿⣿⣿⢿⠆⠀⠀⠸⣿⠁⣾⣿⣯⣿⡧⠀⠀⠀      \/    \____/|______|_| \_|_|  |_|\____/ \____/|_| \_|_____/
+⠀⠀⢀⣿⣿⣿⣻⣽⠠⣟⠀⠀⠀⠀⠀⠻⡛⠀⠀⠀⠀⠀⣻⠄⣿⣿⣿⣿⣿⡀⠀⠀
+⠀⠀⣾⣿⣿⣿⣿⣿⢈⣿⡀⠀⠀⠀⢀⡴⣤⡀⠀⠀⠀⢀⣿⡐⣿⣿⣿⣯⣿⣧⠀⠀  author   : skibidin4than
+⠀⣼⣿⣿⣿⣽⣿⡟⢰⡏⢻⣶⣴⣄⡁⠀⠀⢁⣤⣦⣶⡟⢹⡆⢿⣿⣿⣿⣿⣿⣧⠀  version  : v1.4.1
+⢐⣿⣿⣿⣻⣿⣻⢣⣿⠁⢷⣸⢹⢻⣿⢿⢿⢿⢟⢝⣕⡼⠈⣿⡜⣿⣿⣾⣿⣯⣿⠄  tagline  : Candidates only , validate manually.
+⠀⢿⣿⡿⣿⣿⣟⠿⠁⠀⠀⠈⠙⠚⠯⠮⠾⠺⠓⠋⠁⠀⠀⠘⢻⣾⣿⡿⣿⣟⡿⠁
+⠀⠀⠈⠙⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠉⠁⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</code></pre>
+        <p>Two findings have been validated by hand so far. One is confirmed real and triaged. One is a false positive: an authbypass candidate where the tampered token turned out identical to the original, so the server was right to accept it. That is why a candidate is a lead, not a bug, until a human validates it.</p>
 
         <h2><span class="step-number">04</span> Rules</h2>
         <p>Private and not open source. There is no download link and no repository link.</p>
         <p>Only in-scope targets, only your own accounts, and slow by design, with a delay between requests.</p>
         <p>Scanner output is never submitted as a report. One vulnerability per report, validated by hand first.</p>
+        <p>Finding details stay private until triaged and cleared for disclosure.</p>
 
         <h2><span class="step-number">05</span> Changelog</h2>
         <ul class="cmd-list">
-          <li><code>v1.0.5</code>, 23 Nov 2026 — one-line skip summaries: sqli, ssti and lfi no longer print a line per skipped endpoint.</li>
-          <li><code>v1.0.4</code>, 22 Nov 2026 — jssecrets stops retrying dead third-party scripts and fetches each script once per run.</li>
-          <li><code>v1.0.3</code>, 22 Nov 2026 — live progress display: per-module progress and a request counter in background logs.</li>
-          <li><code>v1.0.1</code>, 22 Nov 2026 — automatic retry with backoff on 429 and 5xx: honours Retry-After, backs off exponentially, slows down adaptively after rate limits.</li>
-          <li><code>headers</code>, 22 Nov 2026 — security-header audit: HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy.</li>
-          <li><code>v1.0.0</code>, 22 Nov 2026 — the scan command (no JSON profiles), a same-origin crawler, and seven new checks: sqli, ssti, lfi, jwt, graphql, apidiscovery, takeover.</li>
+          <li><code>v1.4.1</code>, 27 Nov 2026, deep mode: validate a session, crawl behind a login, auto-discover IDOR and XSS targets.</li>
+          <li><code>v1.4.0</code>, Nov 2026, twenty-eight modules: bruteforce, csrf, graphql_idor and xxe join the checks.</li>
+          <li><code>v1.0.5</code>, 23 Nov 2026, one-line skip summaries: sqli, ssti and lfi no longer print a line per skipped endpoint.</li>
+          <li><code>v1.0.4</code>, 22 Nov 2026, jssecrets stops retrying dead third-party scripts and fetches each script once per run.</li>
+          <li><code>v1.0.3</code>, 22 Nov 2026, live progress display: per-module progress and a request counter in background logs.</li>
+          <li><code>v1.0.1</code>, 22 Nov 2026, automatic retry with backoff on 429 and 5xx: honours Retry-After, backs off exponentially, slows down adaptively after rate limits.</li>
+          <li><code>headers</code>, 22 Nov 2026, security-header audit: HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy.</li>
+          <li><code>v1.0.0</code>, 22 Nov 2026, the scan command (no JSON profiles), a same-origin crawler, and seven new checks: sqli, ssti, lfi, jwt, graphql, apidiscovery, takeover.</li>
         </ul>
 
         <div class="takeaway">
           <p class="takeaway-label">NOTE</p>
-          <p>The example output above is from demo mode (example.com, simulated data). Real findings stay private and are never shown here.</p>
+          <p>The banner above is the real one. Finding counts are real, details stay private until triaged and cleared for disclosure.</p>
         </div>
       </div>
       <footer class="article-footer"><a class="article-back back" href="/#projects">Back to projects</a></footer>
